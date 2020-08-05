@@ -1,5 +1,10 @@
+import random
+import turtle
 
 class Hangman:
+
+    fin = open("wordlist.txt","r")
+    words = [i.strip() for i in fin.readlines()]
 
     def __init__(self):
         
@@ -12,18 +17,25 @@ class Hangman:
         else:
             print("Please enter a valid number.\n")
 
-    def oneP(X):
-        print("oneP")
+    def oneP(self):
+        print("You will now play against the computer.")
+        self.customWords = []
+        yn = input("Would you like to make your own custom words? (y/n)\n").strip().lower()
+        if (yn=="y"):
+            self.cWord=random.choice(self.words) #WIP
+        else:
+            self.cWord = random.choice(self.words)
+        print(self.cWord)
 
     def twoP(self):
         print("twoP")
 
 
 while (True): 
-    yn = input("Do you want to play again?\n").strip().lower()
-    if not yn=="yes":
-        break
     game = Hangman()
+    yn = input("Do you want to play again? (y/n)\n").strip().lower()
+    if not yn=="y":
+        break
 
 # draw_hangman feature
 # one player_game
