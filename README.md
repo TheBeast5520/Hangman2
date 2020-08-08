@@ -1,14 +1,22 @@
-# Hangman2
+# Hangman
 
 #### Description
 
-Hangman Code using turtle library.
+A 2-player Hangman game with graphics.
+
+#### How to use
+
+TBA
 
 #### Terms of Use
 
-This code follows the MIT License, which means you can do pretty much whatever you want with it.
+This code is under the MIT license, meaning you can do pretty much whatever you want with it.
 
-###### Version 1 (Not Released)
+#### Versions
+
+----------------------
+Version 1 (not released yet) 
 
 Features
-* A two-player Hangman game with graphics.
+* A 2-player Hangman game with graphics
+----------------------
