@@ -2,7 +2,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 import time
 
-pause=1
+pause=100
 
 class Graphics(Canvas):
 
@@ -55,11 +55,21 @@ class Graphics(Canvas):
 
 class TEXT(Canvas):
 
-    def __init__(self, master, width, height, text, anchor='center',font=("eraser", 24)):
+    def __init__(self, master, width, height, text, anchor=CENTER,font=("eraser", 24), bg='black'):
 
-        Canvas.__init__(self, master, bg='black',width=width,height=height,highlightthickness=0)
-        self.text = self.create_text(width/2,height/2,anchor = anchor, text=text, fill='white', font = font)
+        Canvas.__init__(self, master, bg=bg,width=width,height=height,highlightthickness=5)
+        self.text = self.create_text(width/2,height/2,anchor = anchor, text=text, fill='white', font = font,justify=CENTER)
 
+
+class BUTTON(Canvas):
+
+    def __init__(self, master, width, height, text, command, anchor=CENTER, font=("eraser", 40), bg='black', relief=RAISED, key=""):
+
+        Canvas.__init__(self, master, bg=bg,width=width, height=height, highlightthickness=5, relief=relief)
+        self.text = self.create_text(width/2,height/2,anchor = anchor, text=text, fill='white', font = font,justify=CENTER)
+        self.bind("<Button-1>", command)
+        if (key != ""):
+            self.bind(key, command)
 
 class Hangman(Frame):
 
@@ -75,23 +85,23 @@ class Hangman(Frame):
 
         
     def welcome(self):
-        self.welc = TEXT(self, 500, 55*3, "Welcome",anchor='s',font=("eraser dust", 30))
-        self.welc.grid(row=0,column=1,rowspan=3)
-        self.after(pause, self.to)
-        
+        self.welc = TEXT(self, 400, 550, text="Welcome\nto\nHANGMAN!",font=("eraser", 40))
+        self.welc.grid(row=0,column=1,rowspan=10)
+        self.after(pause, self.rWgO)
 
-    def to(self):
-        self.Hto = TEXT(self, 500, 55*3, "to",anchor='center',font=("eraser dust", 24))
-        self.Hto.grid(row=3,column=1,rowspan=3)
-        self.after(pause, self.hman)
+    def rWgO(self):
+        self.welc.grid_remove()
+        self.welc.grid_remove()
+        self.onePlayer = BUTTON(self, width=400, height=550/2, text="ONE-PLAYER", command=self.one_player, relief=GROOVE)
+        self.onePlayer.grid(row=0,column=1,rowspan=5)
+        self.twoPlayer = BUTTON(self, width=400, height=550/2, text="TWO-PLAYER", command=self.two_player, relief=GROOVE)
+        self.twoPlayer.grid(row=5,column=1,rowspan=5)
 
-    def hman(self):
-        self.Hman = TEXT(self, 500, 55*4, "HANGMAN!",anchor='n',font=("eraser dust", 36))
-        self.Hman.grid(row=6,column=1,rowspan=4)
+    def one_player(self, misc=""):
+        print("one_player")
 
-    def removeWELC(self):
-        self.delete(self.welcome)
-        # self.delete(self.)
+    def two_player(self, misc=""):
+        print("two_player")
 
 
 def play_hangman():
