@@ -1,46 +1,3 @@
-# import random
-# import turtle
-
-# class Hangman:
-
-#     fin = open("wordlist.txt","r")
-#     words = [i.strip() for i in fin.readlines()]
-
-#     def __init__(self):
-        
-#         self.numPlayers = int(input("Enter the number of players (1/2): \n"))
-
-#         if (self.numPlayers==1):
-#             self.oneP()
-#         elif (self.numPlayers==2):
-#             self.twoP()
-#         else:
-#             print("Please enter a valid number.\n")
-
-#     def oneP(self):
-#         print("You will now play against the computer.")
-#         self.customWords = []
-#         yn = input("Would you like to make your own custom words? (y/n)\n").strip().lower()
-#         if (yn=="y"):
-#             self.cWord=random.choice(self.words) #WIP
-#         else:
-#             self.cWord = random.choice(self.words)
-#         print(self.cWord)
-
-#     def twoP(self):
-#         print("twoP")
-
-
-# while (True): 
-#     game = Hangman()
-#     yn = input("Do you want to play again? (y/n)\n").strip().lower()
-#     if not yn=="y":
-#         break
-
-# # draw_hangman feature
-# # one player_game
-# # two play_game
-
 from tkinter import *
 from PIL import ImageTk, Image
 import time
@@ -71,8 +28,8 @@ class Graphics(Canvas):
 
         Canvas.__init__(self, master, bg='saddle brown', width=self.width, height=self.height, highlightthickness=0)
 
-        self.step = '1'
-        self.createImage(self.step)
+        # self.step = '1'
+        # self.createImage(self.step)
 
     def createImage(self,picName,size=()):
         if size==():
@@ -100,7 +57,8 @@ class TEXT(Canvas):
 
     def __init__(self, master, width, height, text):
 
-
+        Canvas.__init__(self, bg='black',width=width,height=height,highlightthickness=0)
+        self.text = self.create_text(width/2,height/2,anchor = "center", text=text, fill='white', font = ("Arial", 24))
 
 
 class Hangman(Frame):
@@ -113,20 +71,28 @@ class Hangman(Frame):
         self.graphics = Graphics(self)
         self.graphics.grid(row=0,column=0,rowspan=10)
 
-        self.after(pause, self.graphics.nextStep)
+      #  self.after(pause, self.graphics.nextStep)
+        self.after(pause, self.welcome)
 
         
     def welcome(self):
-        print("welcome")
+        self.welc = TEXT(self, 500, 55*3, "Welcome")
+        self.welc.grid(row=0,column=1,rowspan=3)
         self.after(pause, self.to)
         
 
     def to(self):
-        print("to")
+        self.Hto = TEXT(self, 500, 55*3, "to")
+        self.Hto.grid(row=3,column=1,rowspan=3)
         self.after(pause, self.hman)
 
     def hman(self):
-        print("HANGMAN!")
+        self.Hman = TEXT(self, 500, 55*4, "HANGMAN!")
+        self.Hman.grid(row=6,column=1,rowspan=4)
+
+    def removeWELC(self):
+        self.delete(self.welcome)
+        # self.delete(self.)
 
 
 def play_hangman():
