@@ -53,7 +53,8 @@ class Graphics(Canvas):
         '3':'backgrounds/step3.png',
         '4':'backgrounds/step4.png',
         '5':'backgrounds/step5.png',
-        '6':'backgrounds/step6.png'
+        '6':'backgrounds/step6.png',
+        '7':'backgrounds/step7.png'
     }
 
     def __init__(self, master):
@@ -65,7 +66,7 @@ class Graphics(Canvas):
 
         self.step = '1'
         self.createImage(self.step)
-        self.limit='6'
+        self.limit='7'
 
     def createImage(self,picName,size=()):
         if size==():
