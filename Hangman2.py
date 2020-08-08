@@ -2,7 +2,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 import time
 
-pause=500
+pause=1
 
 class Graphics(Canvas):
 
@@ -28,8 +28,8 @@ class Graphics(Canvas):
 
         Canvas.__init__(self, master, bg='saddle brown', width=self.width, height=self.height, highlightthickness=0)
 
-        # self.step = '1'
-        # self.createImage(self.step)
+        self.step = '1'
+        self.createImage(self.step)
 
     def createImage(self,picName,size=()):
         if size==():
@@ -55,10 +55,10 @@ class Graphics(Canvas):
 
 class TEXT(Canvas):
 
-    def __init__(self, master, width, height, text):
+    def __init__(self, master, width, height, text, anchor='center',font=("eraser", 24)):
 
-        Canvas.__init__(self, bg='black',width=width,height=height,highlightthickness=0)
-        self.text = self.create_text(width/2,height/2,anchor = "center", text=text, fill='white', font = ("Arial", 24))
+        Canvas.__init__(self, master, bg='black',width=width,height=height,highlightthickness=0)
+        self.text = self.create_text(width/2,height/2,anchor = anchor, text=text, fill='white', font = font)
 
 
 class Hangman(Frame):
@@ -71,23 +71,22 @@ class Hangman(Frame):
         self.graphics = Graphics(self)
         self.graphics.grid(row=0,column=0,rowspan=10)
 
-      #  self.after(pause, self.graphics.nextStep)
-        self.after(pause, self.welcome)
+        self.after(pause, self.graphics.nextStep)
 
         
     def welcome(self):
-        self.welc = TEXT(self, 500, 55*3, "Welcome")
+        self.welc = TEXT(self, 500, 55*3, "Welcome",anchor='s',font=("eraser dust", 30))
         self.welc.grid(row=0,column=1,rowspan=3)
         self.after(pause, self.to)
         
 
     def to(self):
-        self.Hto = TEXT(self, 500, 55*3, "to")
+        self.Hto = TEXT(self, 500, 55*3, "to",anchor='center',font=("eraser dust", 24))
         self.Hto.grid(row=3,column=1,rowspan=3)
         self.after(pause, self.hman)
 
     def hman(self):
-        self.Hman = TEXT(self, 500, 55*4, "HANGMAN!")
+        self.Hman = TEXT(self, 500, 55*4, "HANGMAN!",anchor='n',font=("eraser dust", 36))
         self.Hman.grid(row=6,column=1,rowspan=4)
 
     def removeWELC(self):
