@@ -45,6 +45,8 @@ from tkinter import *
 from PIL import ImageTk, Image
 import time
 
+pause=500
+
 class Graphics(Canvas):
 
     pics = {
@@ -54,7 +56,12 @@ class Graphics(Canvas):
         '4':'backgrounds/step4.png',
         '5':'backgrounds/step5.png',
         '6':'backgrounds/step6.png',
-        '7':'backgrounds/step7.png'
+        '7':'backgrounds/step7.png',
+        '8':'backgrounds/step8.png',
+        '9':'backgrounds/step9.png',
+        '10':'backgrounds/step10.png',
+        '11':'backgrounds/step11.png',
+        '12':'backgrounds/step12.png'
     }
 
     def __init__(self, master):
@@ -66,7 +73,6 @@ class Graphics(Canvas):
 
         self.step = '1'
         self.createImage(self.step)
-        self.limit='7'
 
     def createImage(self,picName,size=()):
         if size==():
@@ -82,12 +88,20 @@ class Graphics(Canvas):
         self.im = self.im.resize(size,Image.ANTIALIAS)
 
     def nextStep(self):
-        if self.step==self.limit:
+        if self.step=='6':
+            self.after(pause, self.master.welcome)
             return
         self.step = str(int(self.step)+1)
         self.delete(self.pic)
         self.createImage(self.step)
-        self.after(500, self.nextStep)
+        self.after(pause, self.nextStep)
+
+class TEXT(Canvas):
+
+    def __init__(self, master, width, height, text):
+
+
+
 
 class Hangman(Frame):
 
@@ -97,12 +111,22 @@ class Hangman(Frame):
         self.grid()
 
         self.graphics = Graphics(self)
-        self.graphics.grid(row=0,column=0)
+        self.graphics.grid(row=0,column=0,rowspan=10)
 
-        self.after(500, self.graphics.nextStep)
+        self.after(pause, self.graphics.nextStep)
 
         
+    def welcome(self):
+        print("welcome")
+        self.after(pause, self.to)
+        
 
+    def to(self):
+        print("to")
+        self.after(pause, self.hman)
+
+    def hman(self):
+        print("HANGMAN!")
 
 
 def play_hangman():
