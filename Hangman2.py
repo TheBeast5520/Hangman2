@@ -104,8 +104,26 @@ class Hangman(Frame):
 
 
     def two_player(self, misc=""):
-        print("two_player")
-        self.name1 = INPUT()
+        self.onePlayer.grid_remove()
+        self.twoPlayer.grid_remove()
+        self.background = TEXT(self, 400, 550, text="")
+        self.background.grid(row=0,column=1,rowspan=10)
+        self.name1 = Entry(self, bg='black', font = ("eraser",30), justify=CENTER, fg='white')
+        self.name1.insert(0,"""ENTER NAME-1 HERE""")
+        self.name1.bind("<FocusIn>", self.delName1)
+        self.name1.place(width=400, height=550/2, x=500+5, y=5, anchor=NW)
+        self.name2 = Entry(self, bg='black', font = ("eraser",30), justify=CENTER, fg='white')
+        self.name2.insert(0,"ENTER NAME-2 HERE")
+        self.name2.bind("<FocusIn>", self.delName2)
+        self.name2.place(width=400, height=550/2, x=500+5, y=5+550, anchor=SW)
+    
+    def delName1(self, misc=""):
+        self.name1.delete(0, END)
+        self.name1.unbind("<FocusIn>")
+
+    def delName2(self, misc=""):
+        self.name2.delete(0, END)
+        self.name2.unbind("<FocusIn>")
 
 
 def play_hangman():
