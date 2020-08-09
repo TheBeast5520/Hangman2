@@ -98,10 +98,14 @@ class Hangman(Frame):
         self.twoPlayer.grid(row=5,column=1,rowspan=5)
 
     def one_player(self, misc=""):
+        # self.onePlayer.grid_remove()
+        # self.twoPlayer.grid_remove()
         print("one_player")
+
 
     def two_player(self, misc=""):
         print("two_player")
+        self.name1 = INPUT()
 
 
 def play_hangman():
