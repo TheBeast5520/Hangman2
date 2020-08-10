@@ -1,5 +1,11 @@
 # Hangman
 
+#### Latest Update
+
+**NOTE: Neither the two-player nor the one-player versions are complete right now.**
+
+Two-player version will come out shortly.
+
 #### Description
 
 A 2-player Hangman game with graphics.
@@ -14,6 +20,10 @@ A 2-player Hangman game with graphics.
 
 *Run the game*
 There is a hangman2.py code, which you will run with python. Along with that, in the same directory, you must include the entire "backgrounds" folder, with all of its contents.
+
+*How to play*
+* Two-player:
+  * You will be given the option for one-player or two-player
 
 #### Terms of Use
 
