@@ -1,24 +1,30 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import time
+from functools import partial
 
-pause=100
+pause=0
+
+def removePunct(s):
+    for i in """`1234567890-=[]\\;\',./~!@#$%^&*()_+{}|:\"<>?""":
+        s=s.replace(i, "")
+    return s
 
 class Graphics(Canvas):
 
     pics = {
-        '1':'backgrounds/step1.png',
-        '2':'backgrounds/step2.png',
-        '3':'backgrounds/step3.png',
-        '4':'backgrounds/step4.png',
-        '5':'backgrounds/step5.png',
-        '6':'backgrounds/step6.png',
-        '7':'backgrounds/step7.png',
-        '8':'backgrounds/step8.png',
-        '9':'backgrounds/step9.png',
-        '10':'backgrounds/step10.png',
-        '11':'backgrounds/step11.png',
-        '12':'backgrounds/step12.png'
+        1:'backgrounds/step1.png',
+        2:'backgrounds/step2.png',
+        3:'backgrounds/step3.png',
+        4:'backgrounds/step4.png',
+        5:'backgrounds/step5.png',
+        6:'backgrounds/step6.png',
+        7:'backgrounds/step7.png',
+        8:'backgrounds/step8.png',
+        9:'backgrounds/step9.png',
+        10:'backgrounds/step10.png',
+        11:'backgrounds/step11.png',
+        12:'backgrounds/step12.png'
     }
 
     def __init__(self, master):
@@ -28,7 +34,8 @@ class Graphics(Canvas):
 
         Canvas.__init__(self, master, bg='saddle brown', width=self.width, height=self.height, highlightthickness=0)
 
-        self.step = '1'
+        self.step = 1
+        self.limit=6
         self.createImage(self.step)
 
     def createImage(self,picName,size=()):
@@ -45,10 +52,11 @@ class Graphics(Canvas):
         self.im = self.im.resize(size,Image.ANTIALIAS)
 
     def nextStep(self):
-        if self.step=='6':
-            self.after(pause, self.master.welcome)
+        if self.step==self.limit:
+            if self.step==6:
+                self.after(pause, self.master.welcome)
             return
-        self.step = str(int(self.step)+1)
+        self.step += 1
         self.delete(self.pic)
         self.createImage(self.step)
         self.after(pause, self.nextStep)
@@ -66,7 +74,7 @@ class BUTTON(Canvas):
     def __init__(self, master, width, height, text, command, anchor=CENTER, font=("EraserDust", 40), bg='black', relief=RAISED, key=""):
 
         Canvas.__init__(self, master, bg=bg,width=width, height=height, highlightthickness=5, relief=relief)
-        self.text = self.create_text(width/2,height/2,anchor = anchor, text=text, fill='white', font = font,justify=CENTER)
+        self.text = self.create_text(width/2,height/2,anchor = anchor, text=text, fill='white' ,font = font,justify=CENTER)
         self.bind("<Button-1>", command)
         if (key != ""):
             self.bind(key, command)
@@ -86,6 +94,7 @@ class Hangman(Frame):
 
         self.after(pause, self.graphics.nextStep)
 
+        self.turn=0
         
     def welcome(self):
         self.welc = TEXT(self, 400, 550, text="Welcome\nto\nHANGMAN!",font=("EraserDust", 40))
@@ -110,11 +119,11 @@ class Hangman(Frame):
         self.onePlayer.grid_remove()
         self.twoPlayer.grid_remove()
         self.name1 = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white', insertbackground='white')
-        self.name1.insert(0,"""ENTER NAME-1 HERE""")
+        self.name1.insert(0,"""Enter name-1 here""")
         self.name1.bind("<FocusIn>", self.delName1)
         self.name1.place(width=400, height=550/2, x=500+5, y=5, anchor=NW)
         self.name2 = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white', insertbackground='white')
-        self.name2.insert(0,"ENTER NAME-2 HERE")
+        self.name2.insert(0,"Enter name-2 here")
         self.name2.bind("<FocusIn>", self.delName2)
         self.name2.place(width=400, height=550/2, x=500+5, y=5+550, anchor=SW)
         self.dButton = Button(self, bg='black', fg='white', font = ("EraserDust", 20), justify=CENTER, command=self.two_player2, text='continue')
@@ -136,8 +145,8 @@ class Hangman(Frame):
         self.two_player3()
 
     def two_player3(self, misc=""):
-        self.word = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white')
-        self.word.insert(0,"ENTER WORD HERE")
+        self.word = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white', insertbackground='white')
+        self.word.insert(0, self.names[self.turn]+", enter word here.")
         self.word.bind("<FocusIn>", self.delWord)
         self.word.place(width=400, height=550/2, x=500+5, y=5, anchor=NW)
         self.wordGet = Button(self, bg='black', fg='white', font = ("EraserDust", 30), justify=CENTER, command=self.two_player4, text='Click to enter word.')
@@ -152,11 +161,33 @@ class Hangman(Frame):
 
     def two_player4(self, misc=""):
         self.WORD = self.word.get()
+        self.WORD = removePunct(self.WORD)
         self.word.destroy()
         self.wordGet.destroy()
-        
+        lettersLeft = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        self.word = TEXT(self, 400, 550/10*2, text=("_ "*len(self.WORD))[0:-1],font=("EraserDust", 30))
+        self.word.grid(row=0, column=1, rowspan=2)
+        self.ins = TEXT(self, 400, 550/10*8, text=self.names[(self.turn+1)%2]+",\nClick on a key to make a guess.\nCase counts!",font=("EraserDust", 20))
+        self.ins.grid(row=2, column=1, rowspan=8)
+        self.bindAllLetters()
+
+    def guessLetter(self, letter):
+        if letter=="Space":
+            letter=" "
+        print(letter)
 
 
+    def bindAllLetters(self):
+        self.focus_set()
+        letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        for i in letters:
+            self.bind("<"+i+">", lambda event, let=i: self.guessLetter(let))
+        self.bind("<space>", lambda event: self.guessLetter("Space"))
+
+    def unBindAllLetters(self):
+        letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+        for i in letters:
+            self.unbind("<"+i+">", lambda event, let=i: self.guessLetter(let))
 
 
 def play_hangman():
