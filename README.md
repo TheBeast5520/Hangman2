@@ -13,8 +13,8 @@ A 2-player Hangman game with graphics.
 #### How to use
 
 *Installing Font*
-* Go To https://www.1001fonts.com/eraser-font.html#styles
-* Click Download
+* Go To https://www.dafont.com/eraser.font
+* Click Download (in top-right)
 * Go to your downloads, and "Extract All" from the zip.
 * Open both the tff files, and click "Install"
 
