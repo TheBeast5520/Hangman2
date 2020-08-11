@@ -95,9 +95,9 @@ class Hangman(Frame):
     def rWgO(self):
         self.welc.grid_remove()
         self.welc.grid_remove()
-        self.onePlayer = BUTTON(self, width=400, height=550/2, text="ONE-PLAYER", command=self.one_player, relief=GROOVE)
+        self.onePlayer = Button(self, bg='black', fg='white', font = ("EraserDust", 30), justify=CENTER, command=self.one_player, text='ONE-PLAYER')
         self.onePlayer.grid(row=0,column=1,rowspan=5)
-        self.twoPlayer = BUTTON(self, width=400, height=550/2, text="TWO-PLAYER", command=self.two_player1, relief=GROOVE)
+        self.twoPlayer =Button(self, bg='black', fg='white', font = ("EraserDust", 30), justify=CENTER, command=self.two_player1, text='TWO-PLAYER')
         self.twoPlayer.grid(row=5,column=1,rowspan=5)
 
     def one_player(self, misc=""):
@@ -109,11 +109,11 @@ class Hangman(Frame):
     def two_player1(self, misc=""):
         self.onePlayer.grid_remove()
         self.twoPlayer.grid_remove()
-        self.name1 = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white')
+        self.name1 = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white', insertbackground='white')
         self.name1.insert(0,"""ENTER NAME-1 HERE""")
         self.name1.bind("<FocusIn>", self.delName1)
         self.name1.place(width=400, height=550/2, x=500+5, y=5, anchor=NW)
-        self.name2 = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white')
+        self.name2 = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white', insertbackground='white')
         self.name2.insert(0,"ENTER NAME-2 HERE")
         self.name2.bind("<FocusIn>", self.delName2)
         self.name2.place(width=400, height=550/2, x=500+5, y=5+550, anchor=SW)
@@ -133,8 +133,29 @@ class Hangman(Frame):
         self.name1.destroy()
         self.name2.destroy()
         self.dButton.grid_remove()
+        self.two_player3()
 
-        # while True:
+    def two_player3(self, misc=""):
+        self.word = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white')
+        self.word.insert(0,"ENTER WORD HERE")
+        self.word.bind("<FocusIn>", self.delWord)
+        self.word.place(width=400, height=550/2, x=500+5, y=5, anchor=NW)
+        self.wordGet = Button(self, bg='black', fg='white', font = ("EraserDust", 30), justify=CENTER, command=self.two_player4, text='Click to enter word.')
+        self.wordGet.grid(row=5, column=1, rowspan=5)
+
+    def delWord(self, misc=""):
+        self.word.delete(0, END)
+        self.word.unbind("<FocusIn>")
+
+    def removeWord(self, misc=""):
+        self.word.destroy()
+
+    def two_player4(self, misc=""):
+        self.WORD = self.word.get()
+        self.word.destroy()
+        self.wordGet.destroy()
+        
+
 
 
 
