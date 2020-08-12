@@ -52,14 +52,18 @@ class Graphics(Canvas):
         self.im = self.im.resize(size,Image.ANTIALIAS)
 
     def nextStep(self):
-        if self.step==self.limit:
-            if self.step==6:
-                self.after(pause, self.master.welcome)
-            return
+
         self.step += 1
         self.delete(self.pic)
         self.createImage(self.step)
+        if self.step==self.limit:
+            if self.step==6:
+                self.after(pause, self.master.welcome)
+            if self.step==12:
+                self.master.done=True
+            return
         self.after(pause, self.nextStep)
+
 
 class TEXT(Canvas):
 
@@ -95,6 +99,8 @@ class Hangman(Frame):
         self.after(pause, self.graphics.nextStep)
 
         self.turn=0
+
+        self.done=False
         
     def welcome(self):
         self.welc = TEXT(self, 400, 550, text="Welcome\nto\nHANGMAN!",font=("EraserDust", 40))
@@ -165,29 +171,52 @@ class Hangman(Frame):
         self.word.destroy()
         self.wordGet.destroy()
         lettersLeft = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-        self.word = TEXT(self, 400, 550/10*2, text=("_ "*len(self.WORD))[0:-1],font=("EraserDust", 30))
+        self.wordSoFar = ["_" for i in range(len(self.WORD))]
+        self.word = TEXT(self, 400, 550/10*2, text=" ".join(self.wordSoFar),font=("EraserDust", 30))
         self.word.grid(row=0, column=1, rowspan=2)
-        self.ins = TEXT(self, 400, 550/10*8, text=self.names[(self.turn+1)%2]+",\nClick on a key to make a guess.\nCase counts!",font=("EraserDust", 20))
+        self.ins = TEXT(self, 400, 550/10*8, text=self.names[(self.turn+1)%2]+",\nClick on a key to make a guess.\nCase counts!\nClick '2' to see remaining letters\nThey will be printed to console",font=("EraserDust", 20))
         self.ins.grid(row=2, column=1, rowspan=8)
         self.bindAllLetters()
 
     def guessLetter(self, letter):
         if letter=="Space":
             letter=" "
-        print(letter)
+
+        if letter in self.WORD:
+            for i in range(len(self.wordSoFar)):
+                if self.WORD[i]==letter:
+                    self.wordSoFar[i] = letter
+            self.word.itemconfig(self.word.text, text=" ".join(self.wordSoFar))
+        else:
+            self.graphics.limit += 1
+            print(self.graphics.limit)
+            self.graphics.nextStep()
+            if self.done:
+                self.two_player5()
+
+        self.unbind("<"+letter+">")
+        self.letters=self.letters.replace(letter, "")
+
+    def two_player5(self):
+        self.word.grid_remove()
+        self.ins.grid_remove()
 
 
     def bindAllLetters(self):
         self.focus_set()
-        letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        for i in letters:
+        self.letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        for i in self.letters:
             self.bind("<"+i+">", lambda event, let=i: self.guessLetter(let))
+        self.letters += " "
         self.bind("<space>", lambda event: self.guessLetter("Space"))
 
     def unBindAllLetters(self):
         letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
         for i in letters:
             self.unbind("<"+i+">", lambda event, let=i: self.guessLetter(let))
+
+    def printAll(self):
+        pass
 
 
 def play_hangman():
