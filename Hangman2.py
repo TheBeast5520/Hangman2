@@ -1,7 +1,6 @@
 from tkinter import *
 from PIL import ImageTk, Image
-import time
-from functools import partial
+from tkinter import messagebox
 
 pause=0
 
@@ -159,8 +158,10 @@ class Hangman(Frame):
         self.wordGet.grid(row=5, column=1, rowspan=5)
 
     def delWord(self, misc=""):
-        self.word.delete(0, END)
-        self.word.unbind("<FocusIn>")
+        self.word.destroy()
+        self.word = Entry(self, bg='black', font = ("EraserDust",30), justify=CENTER, fg='white', insertbackground='white', show='*')
+        self.word.place(width=400, height=550/2, x=500+5, y=5, anchor=NW)
+        self.word.focus_set()
 
     def removeWord(self, misc=""):
         self.word.destroy()
@@ -187,19 +188,22 @@ class Hangman(Frame):
                 if self.WORD[i]==letter:
                     self.wordSoFar[i] = letter
             self.word.itemconfig(self.word.text, text=" ".join(self.wordSoFar))
+            if not '_' in self.wordSoFar:
+                self.two_player5('won')
         else:
             self.graphics.limit += 1
-            print(self.graphics.limit)
             self.graphics.nextStep()
             if self.done:
-                self.two_player5()
+                self.two_player5('lost')
 
         self.unbind("<"+letter+">")
         self.letters=self.letters.replace(letter, "")
 
-    def two_player5(self):
+    def two_player5(self, outcome):
         self.word.grid_remove()
         self.ins.grid_remove()
+        self.unBindAllLetters()
+        messagebox.showinfo('Hangman', self.names[(self.turn+1)%2]+", you "+outcome+"!")
 
 
     def bindAllLetters(self):
@@ -209,15 +213,16 @@ class Hangman(Frame):
             self.bind("<"+i+">", lambda event, let=i: self.guessLetter(let))
         self.letters += " "
         self.bind("<space>", lambda event: self.guessLetter("Space"))
+        self.bind("2", lambda event : self.printAll())
 
     def unBindAllLetters(self):
-        letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+        letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ2"
         for i in letters:
-            self.unbind("<"+i+">", lambda event, let=i: self.guessLetter(let))
+            self.unbind("<"+i+">")
+        self.unbind("<space>")
 
     def printAll(self):
-        pass
-
+        print(list(self.letters))
 
 def play_hangman():
     root = Tk()
